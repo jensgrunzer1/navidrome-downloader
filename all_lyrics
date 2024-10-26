@@ -2,5 +2,5 @@
 mydir="$1"
 echo running  $0 on "$mydir"
 echo get files by extension
-find "$mydir"/ -type f \( -iname \*.flac -o -iname \*.mp3 \) -exec sh -c "beetlyrics_file.sh \""{}"\"" \; 
+find "$mydir"/ -type f  -print0 | xargs -0 -P 30 "beetlyrics_file.sh"
 echo finished running $0
