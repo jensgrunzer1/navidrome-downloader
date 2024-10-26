@@ -5,6 +5,5 @@ folder=/var/lib/navidrome/music
 pushd $folder
 echo "starting spotdl"
 ./spotdl $i
-echo "nigeg"
 ./all_lyrics "$folder"
 popd
