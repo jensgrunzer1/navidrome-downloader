@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bash-Skript Live-Output</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap">
+    <style>
+        /* Material Design Dark Theme */
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 400px;
+            text-align: center;
+        }
+        .input-field {
+            background-color: #1E1E1E;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            margin: 10px 0;
+            width: 100%;
+            font-size: 16px;
+        }
+        .input-field:focus {
+            outline: none;
+            border-bottom: 2px solid #BB86FC;
+        }
+        .submit-button {
+            background-color: #BB86FC;
+            color: #121212;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        .submit-button:hover {
+            background-color: #3700B3;
+        }
+        .output {
+            background-color: #1E1E1E;
+            color: #BB86FC;
+            padding: 10px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Script-Parameter Eingeben</h2>
+        <input id="parameter" type="text" class="input-field" placeholder="Script-Parameter eingeben...">
+        <button class="submit-button" onclick="startScript()">Start</button>
+        <div id="output" class="output"></div>
+    </div>
+
+    <script>
+        let eventSource;
+
+        function startScript() {
+            const parameter = document.getElementById('parameter').value;
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = ''; // Clear previous output
+
+            if (eventSource) eventSource.close(); // Close previous connection if open
+
+            eventSource = new EventSource(`execute.php?parameter=${encodeURIComponent(parameter)}`);
+
+            eventSource.onmessage = function(event) {
+                outputDiv.innerHTML += event.data + '<br>'; // Append each line of output
+                outputDiv.scrollTop = outputDiv.scrollHeight; // Auto-scroll to bottom
+            };
+
+            eventSource.onerror = function() {
+                eventSource.close();
+            };
+        }
+    </script>
+</body>
+</html>

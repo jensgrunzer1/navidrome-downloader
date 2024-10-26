@@ -1,0 +1,6 @@
+#!/bin/bash
+mydir="$1"
+echo running  $0 on "$mydir"
+echo get files by extension
+find "$mydir"/ -type f \( -iname \*.flac -o -iname \*.mp3 \) -exec sh -c "beetlyrics_file.sh \""{}"\"" \; 
+echo finished running $0
